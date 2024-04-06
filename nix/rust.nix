@@ -1,11 +1,8 @@
-{ stdenv
-, pkgs
+{
+  stdenv,
+  pkgs,
 }:
-
-with pkgs;
-
-let
-
+with pkgs; let
   patchLibs =
     if stdenv.isDarwin
     then ''
@@ -18,10 +15,10 @@ let
   self = {
     tokenizers = naersk.buildPackage {
       src = ../.;
-      buildInputs = [ libiconv pkgconfig ];
+      buildInputs = [libiconv pkg-config];
       release = true;
-      cargoBuildOptions = x: x ++ [ "-p" "tokenizers" ];
-      cargoTestOptions = x: x ++ [ "-p" "tokenzers" ];
+      cargoBuildOptions = x: x ++ ["-p" "tokenizers"];
+      cargoTestOptions = x: x ++ ["-p" "tokenzers"];
       copyBins = true;
       copyLibs = true;
       copyTarget = false;
@@ -29,17 +26,15 @@ let
 
     tokenizers-haskell = naersk.buildPackage {
       src = ../.;
-      buildInputs = [ libiconv pkgconfig ];
+      buildInputs = [libiconv pkg-config];
       release = true;
-      cargoBuildOptions = x: x ++ [ "-p" "tokenizers-haskell" ];
-      cargoTestOptions = x: x ++ [ "-p" "tokenizers-haskell" ];
+      cargoBuildOptions = x: x ++ ["-p" "tokenizers-haskell"];
+      cargoTestOptions = x: x ++ ["-p" "tokenizers-haskell"];
       copyBins = false;
       copyLibs = true;
       copyTarget = false;
-      overrideMain = x: x // { postInstall = patchLibs; };
+      overrideMain = x: x // {postInstall = patchLibs;};
     };
   };
-
 in
-
   self
